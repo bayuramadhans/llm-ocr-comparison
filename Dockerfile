@@ -32,15 +32,15 @@ RUN npm ci --only=production || npm install --production
 # Copy built application from builder
 COPY --from=builder /app/.next ./.next
 
-# Expose port 3001
-EXPOSE 3001
+# Expose port 80
+EXPOSE 80
 
 # Set environment to production
 ENV NODE_ENV=production
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-  CMD node -e "require('http').get('http://localhost:3001', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"
+  CMD node -e "require('http').get('http://localhost:80', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"
 
 # Use dumb-init to run Next.js
 ENTRYPOINT ["dumb-init", "--"]
